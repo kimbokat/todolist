@@ -13,7 +13,7 @@ function App() {
   <AppBar position="static">
     <Toolbar>
       <Typography variant="h6">
-        My To Do Lists
+        My To Do List
       </Typography>
     </Toolbar>
   </AppBar>

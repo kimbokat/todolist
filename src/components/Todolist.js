@@ -50,8 +50,10 @@ export default function Todolist() {
     {
       field: "date",
       sortable: true,
-      filter: "agDateColumnFilter",
-      
+      filter: "agTextColumnFilter",
+      floatingFilterComponentParams: {
+        suppressFilterButton: true,
+      },
       floatingFilter: true,
     },
     {
