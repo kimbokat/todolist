@@ -19,7 +19,7 @@ export default function Todolist() {
   const addTodo = (event) => {
     event.preventDefault();
     setTodos([...todos, todo]);
-    setTodo({ description: "", date: "" });
+    setTodo({ desc: "", date: "", priority: "" });
   };
 
   const deleteTodo = () => {
@@ -37,22 +37,42 @@ export default function Todolist() {
   };
 
   const [columnDefs] = useState([
-    { field: "desc", sortable: true, filter: true },
+    {
+      field: "desc",
+      sortable: true,
+      suppressMenu: true,
+      filter: "agTextColumnFilter",
+      floatingFilterComponentParams: {
+        suppressFilterButton: true,
+      },
+      floatingFilter: true,
+    },
+    {
+      field: "date",
+      sortable: true,
+      filter: "agDateColumnFilter",
+      
+      floatingFilter: true,
+    },
     {
       field: "priority",
       sortable: true,
       filter: true,
+      suppressMenu: true,
+      filter: "agTextColumnFilter",
+      floatingFilterComponentParams: {
+        suppressFilterButton: true,
+      },
+      floatingFilter: true,
       cellStyle: (params) =>
-        params.value === "high" || "High"
+        params.value === ("high" || "High")
           ? { color: "red" }
           : { color: "black" },
     },
-    { field: "date", sortable: true, filter: true },
   ]);
 
   return (
     <div className="App">
-      
       <Stack
         direction="row"
         spacing={2}
@@ -61,23 +81,21 @@ export default function Todolist() {
       >
         <TextField
           variant="standard"
-          label="date"
+          label="Date"
           name="date"
           value={todo.date}
           onChange={inputChanged}
         />
         <TextField
           variant="standard"
-          label="description"
-          type="text"
+          label="Description"
           name="desc"
           value={todo.desc}
           onChange={inputChanged}
         />
         <TextField
           variant="standard"
-          label="priority"
-          type="text"
+          label="Priority"
           name="priority"
           value={todo.priority}
           onChange={inputChanged}
@@ -111,10 +129,9 @@ export default function Todolist() {
           rowData={todos}
           columnDefs={columnDefs}
           rowSelection="single"
+          animateRows={true}
         ></AgGridReact>
       </div>
-
-      {/*<Todotable todos={todos} setTodos={setTodos} />*/}
     </div>
   );
 }
