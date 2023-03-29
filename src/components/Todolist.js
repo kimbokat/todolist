@@ -7,6 +7,9 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -16,15 +19,16 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
 
 export default function Todolist() {
-  const [todo, setTodo] = useState({ desc: "", date: null, priority: "" });
+  const [todo, setTodo] = useState({  date: null, desc: "",priority: "" });
   const [todos, setTodos] = useState([]);
+  const [value, setValue] = useState('one');
 
   const gridRef = useRef();
 
   const addTodo = (event) => {
     event.preventDefault();
     setTodos([...todos, todo]);
-    setTodo({ desc: "", date: null, priority: "" });
+    setTodo({  date: null, desc: "", priority: "" });
   };
 
   const deleteTodo = () => {
@@ -41,11 +45,15 @@ export default function Todolist() {
     setTodo({ ...todo, [event.target.name]: event.target.value });
   };
 
+  const handleChange = (event, value) => {
+    setValue(value);
+    };
+    
+
   const [columnDefs] = useState([
     {
-      field: "desc",
+      field: "date",
       sortable: true,
-      suppressMenu: true,
       filter: "agTextColumnFilter",
       floatingFilterComponentParams: {
         suppressFilterButton: true,
@@ -53,8 +61,9 @@ export default function Todolist() {
       floatingFilter: true,
     },
     {
-      field: "date",
+      field: "desc",
       sortable: true,
+      suppressMenu: true,
       filter: "agTextColumnFilter",
       floatingFilterComponentParams: {
         suppressFilterButton: true,
@@ -79,28 +88,35 @@ export default function Todolist() {
 
   return (
     <div className="App">
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Stack
+<Tabs value={value} onChange={handleChange}>
+<Tab value="one" label="Home" />
+<Tab value="two" label="Todo List" />
+</Tabs>
+{value === 'one' && <div>Welcome to the Todo List app!</div>}
+{value === 'two' && (
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack
           direction="row"
           spacing={2}
           alignItems="center"
           justifyContent="center"
         >
           <DatePicker
+            label="Date"
             views={["year", "month", "day"]} //to do: mahdollinen ratkaisu
             value={todo.date}
             onChange={(date) => setTodo({ ...todo, date })}
           />
 
           <TextField
-            variant="standard"
+            variant="outlined"
             label="Description"
             name="desc"
             value={todo.desc}
             onChange={inputChanged}
           />
           <TextField
-            variant="standard"
+            variant="outlined"
             label="Priority"
             name="priority"
             value={todo.priority}
@@ -112,7 +128,7 @@ export default function Todolist() {
             variant="contained"
             onClick={addTodo}
           >
-            Add todo
+          Add todo
           </Button>
           <Button
             size="small"
@@ -124,7 +140,7 @@ export default function Todolist() {
             Delete
           </Button>
         </Stack>
-
+        
         <div
           className="ag-theme-material"
           style={{ height: 500, width: 600, margin: "auto" }}
@@ -139,6 +155,9 @@ export default function Todolist() {
           ></AgGridReact>
         </div>
       </LocalizationProvider>
-    </div>
+)}
+</div>
+
+
   );
 }
