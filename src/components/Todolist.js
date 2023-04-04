@@ -80,7 +80,7 @@ export default function Todolist() {
       },
       floatingFilter: true,
       cellStyle: (params) =>
-        params.value === ("high" || "High")
+        params.value === "high" || "High"
           ? { color: "red" }
           : { color: "black" },
     },
